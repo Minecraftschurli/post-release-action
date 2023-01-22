@@ -26,6 +26,12 @@ inputs:
   curseforge-link:
     description: 'The link to the created CurseForge release'
     required: false
+  exclude-links-readme:
+    description: 'A comma-separated list of links to exclude from the readme'
+    required: false
+  exclude-links-webhook:
+    description: 'A comma-separated list of links to exclude from the webhook message'
+    required: false
   published-to:
     description: 'The platforms the release was published to'
     required: true

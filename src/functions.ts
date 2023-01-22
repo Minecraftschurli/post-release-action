@@ -49,7 +49,7 @@ export async function sendWebhookMessage(webhook: Webhook): Promise<APIMessage> 
     title: webhook.message.title.replace("{version}", version),
     description: webhook.message.description?.replace?.("{version}", version),
     color: 0x00ff00,
-    fields: webhook.message.fields
+    fields: webhook.message.fields.map(f => ({...f, inline: true}))
   };
   return await webhookClient.send({
     embeds: [embed]

@@ -49,6 +49,12 @@ function getInputs(): Inputs {
       required: true,
       trimWhitespace: true
     });
+    const excludeLinks = getInput("exclude-links-webhook", {
+      required: false,
+      trimWhitespace: true
+    })
+      ?.split?.(",")
+      ?.map?.(s => s.trim());
     webhook = {
       url: webhookUrl,
       name: webhookName,
@@ -57,7 +63,9 @@ function getInputs(): Inputs {
         version,
         title,
         description,
-        fields: links.map(f => ({name: f.name, value: `[Download](${f.link})`}))
+        fields: links
+          .filter(value => !(value.name in excludeLinks))
+          .map(f => ({name: f.name, value: `[Download](${f.link})`}))
       }
     };
   }
@@ -76,10 +84,16 @@ function getInputs(): Inputs {
         required: false,
         trimWhitespace: true
       }) ?? "Update README.md for Release {version}";
+    const excludeLinks = getInput("exclude-links-readme", {
+      required: false,
+      trimWhitespace: true
+    })
+      ?.split?.(",")
+      ?.map?.(s => s.trim());
     github = {
       updateMessage,
       readmeTemplateFile,
-      links,
+      links: links.filter(value => !(value.name in excludeLinks)),
       version,
       context: gh.context,
       getOctokit: () => gh.getOctokit(githubToken)
