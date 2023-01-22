@@ -13,14 +13,6 @@ function getInputs(): Inputs {
     trimWhitespace: true
   }).split("-", 2);
   const version = {mcVersion, modVersion};
-  const webhookUrl = getInput("webhook-url", {
-    required: false,
-    trimWhitespace: true
-  });
-  const githubToken = getInput("github-token", {
-    required: false,
-    trimWhitespace: true
-  });
   const links: NamedLink[] = getInput("published-to", {
     required: true,
     trimWhitespace: true
@@ -32,26 +24,27 @@ function getInputs(): Inputs {
         required: true,
         trimWhitespace: true
       });
-      return {
-        name,
-        link
-      };
+      return {name, link};
     });
-  const webhookName = getInput("webhook-name", {
+  const webhookUrl = getInput("webhook-url", {
     required: false,
     trimWhitespace: true
   });
-  const webhookAvatar = getInput("webhook-avatar", {
-    required: false,
-    trimWhitespace: true
-  });
-  const title =
-    getInput("webhook-title", {
-      required: false,
-      trimWhitespace: true
-    }) ?? "New version {version} released!";
   let webhook: Webhook | undefined;
   if (webhookUrl) {
+    const webhookName = getInput("webhook-name", {
+      required: false,
+      trimWhitespace: true
+    });
+    const webhookAvatar = getInput("webhook-avatar", {
+      required: false,
+      trimWhitespace: true
+    });
+    const title =
+      getInput("webhook-title", {
+        required: false,
+        trimWhitespace: true
+      }) ?? "New version {version} released!";
     const description = getInput("webhook-message", {
       required: true,
       trimWhitespace: true
@@ -68,6 +61,10 @@ function getInputs(): Inputs {
       }
     };
   }
+  const githubToken = getInput("github-token", {
+    required: false,
+    trimWhitespace: true
+  });
   let github: GitHub | undefined;
   if (githubToken) {
     const readmeTemplateFile = getInput("readme-template", {

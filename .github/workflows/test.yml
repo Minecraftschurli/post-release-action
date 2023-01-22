@@ -24,6 +24,7 @@ jobs:
           webhook-url: ${{ secrets.WEBHOOK_URL }}
           webhook-message: 'This is a test message'
           webhook-title: 'Test Message'
+          version: '1.1.1-1.0.0'
           published-to: 'GitHub,Modrinth,CurseForge'
           github-link: 'https://github.com/'
           modrinth-link: 'https://modrinth.com/mod/'

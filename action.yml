@@ -26,6 +26,9 @@ inputs:
   curseforge-link:
     description: 'The link to the created CurseForge release'
     required: false
+  published-to:
+    description: 'The platforms the release was published to'
+    required: true
   version:
     description: 'The version of the release'
     required: true
