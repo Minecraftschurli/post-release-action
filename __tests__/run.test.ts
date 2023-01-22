@@ -21,6 +21,7 @@ test("test getInputs", () => {
   expect(inputs.github).toBeUndefined();
   expect(inputs.webhook).toBeDefined();
   expect(inputs.webhook?.url).toBe(process.env["TEST_WEBHOOK_URL"] ?? "${{ secrets.TEST_WEBHOOK_URL }}");
+  expect(inputs.webhook?.name).toBe("Test Webhook");
   expect(inputs.webhook?.message).toBeDefined();
   expect(inputs.webhook?.message?.version).toStrictEqual({mcVersion: "1.1.1", modVersion: "1.0.0"});
   expect(inputs.webhook?.message?.fields).toBeDefined();

@@ -24,6 +24,7 @@ jobs:
       - uses: ./
         with:
           webhook-url: ${{ secrets.TEST_WEBHOOK_URL }}
+          webhook-name: 'Test Webhook'
           webhook-message: 'This is a test message for {version}'
           webhook-title: 'Test Message for {version}'
           version: '1.1.1-1.0.0'
