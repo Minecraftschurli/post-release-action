@@ -1,11 +1,34 @@
-name: 'Your name here'
-description: 'Provide a description here'
-author: 'Your name or organization here'
+name: 'Post Release'
+description: 'Sends a message to a Discord webhook after a release is published and/or updates the readme with the latest release information'
+author: 'Minecraftschurli'
 inputs:
-  milliseconds: # change this
+  webhook-url:
+    description: 'The webhook URL to send the message to'
+    required: false
+  webhook-message:
+    description: 'The message to send'
+    required: false
+  webhook-title:
+    description: 'The title of the message to send'
+    required: false
+  github-token:
+    description: 'The GitHub token to use'
+    required: false
+  github-update-message:
+    description: 'The message to use for the update commit'
+    required: false
+  github-link:
+    description: 'The link to the created GitHub release'
+    required: false
+  modrinth-link:
+    description: 'The link to the created Modrinth release'
+    required: false
+  curseforge-link:
+    description: 'The link to the created CurseForge release'
+    required: false
+  version:
+    description: 'The version of the release'
     required: true
-    description: 'input description here'
-    default: 'default value if applicable'
 runs:
   using: 'node16'
   main: 'dist/index.js'

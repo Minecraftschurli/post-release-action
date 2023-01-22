@@ -21,4 +21,10 @@ jobs:
       - uses: actions/checkout@v2
       - uses: ./
         with:
-          milliseconds: 1000
+          webhook-url: ${{ secrets.WEBHOOK_URL }}
+          webhook-message: 'This is a test message'
+          webhook-title: 'Test Message'
+          published-to: 'GitHub,Modrinth,CurseForge'
+          github-link: 'https://github.com/'
+          modrinth-link: 'https://modrinth.com/mod/'
+          curseforge-link: 'https://mc-mods.cf/'
