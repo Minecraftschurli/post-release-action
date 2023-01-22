@@ -40,6 +40,8 @@ __nccwpck_require__.d(__webpack_exports__, {
   "K": () => (/* binding */ run)
 });
 
+// UNUSED EXPORTS: getInputs
+
 // EXTERNAL MODULE: ./node_modules/discord.js/src/index.js
 var src = __nccwpck_require__(85973);
 ;// CONCATENATED MODULE: ./lib/functions.js
@@ -52,7 +54,7 @@ async function sendWebhookMessage(webhook) {
         title: webhook.message.title.replace("{version}", version),
         description: (_b = (_a = webhook.message.description) === null || _a === void 0 ? void 0 : _a.replace) === null || _b === void 0 ? void 0 : _b.call(_a, "{version}", version),
         color: 0x00ff00,
-        fields: webhook.message.fields
+        fields: webhook.message.fields.map(f => (Object.assign(Object.assign({}, f), { inline: true })))
     };
     return await webhookClient.send({
         embeds: [embed]
@@ -148,20 +150,12 @@ var lib_github = __nccwpck_require__(95438);
 
 
 function getInputs() {
-    var _a, _b;
+    var _a, _b, _c, _d, _e, _f, _g, _h, _j, _k;
     const [mcVersion, modVersion] = (0,core.getInput)("version", {
         required: true,
         trimWhitespace: true
     }).split("-", 2);
     const version = { mcVersion, modVersion };
-    const webhookUrl = (0,core.getInput)("webhook-url", {
-        required: false,
-        trimWhitespace: true
-    });
-    const githubToken = (0,core.getInput)("github-token", {
-        required: false,
-        trimWhitespace: true
-    });
     const links = (0,core.getInput)("published-to", {
         required: true,
         trimWhitespace: true
@@ -173,29 +167,38 @@ function getInputs() {
             required: true,
             trimWhitespace: true
         });
-        return {
-            name,
-            link
-        };
+        return { name, link };
     });
-    const webhookName = (0,core.getInput)("webhook-name", {
+    const webhookUrl = (0,core.getInput)("webhook-url", {
         required: false,
         trimWhitespace: true
     });
-    const webhookAvatar = (0,core.getInput)("webhook-avatar", {
-        required: false,
-        trimWhitespace: true
-    });
-    const title = (_a = (0,core.getInput)("webhook-title", {
-        required: false,
-        trimWhitespace: true
-    })) !== null && _a !== void 0 ? _a : "New version {version} released!";
     let webhook;
     if (webhookUrl) {
+        const webhookName = (0,core.getInput)("webhook-name", {
+            required: false,
+            trimWhitespace: true
+        }) || undefined;
+        const webhookAvatar = (0,core.getInput)("webhook-avatar", {
+            required: false,
+            trimWhitespace: true
+        }) || undefined;
+        const title = (_a = (0,core.getInput)("webhook-title", {
+            required: false,
+            trimWhitespace: true
+        })) !== null && _a !== void 0 ? _a : "New version {version} released!";
         const description = (0,core.getInput)("webhook-message", {
             required: true,
             trimWhitespace: true
-        });
+        }) || undefined;
+        const excludeLinks = (_e = (_d = (_c = (_b = (0,core.getInput)("exclude-links-webhook", {
+            required: false,
+            trimWhitespace: true
+        })) === null || _b === void 0 ? void 0 : _b.split) === null || _c === void 0 ? void 0 : _c.call(_b, ",")) === null || _d === void 0 ? void 0 : _d.map) === null || _e === void 0 ? void 0 : _e.call(_d, s => s.trim());
+        let links2 = links;
+        if (excludeLinks) {
+            links2 = links2.filter(f => !excludeLinks.includes(f.name));
+        }
         webhook = {
             url: webhookUrl,
             name: webhookName,
@@ -204,24 +207,38 @@ function getInputs() {
                 version,
                 title,
                 description,
-                fields: links.map(f => ({ name: f.name, value: `[Download](${f.link})` }))
+                fields: links2.map(f => ({ name: f.name, value: `[Download](${f.link})` }))
             }
         };
+        // eslint-disable-next-line no-console
+        console.dir(webhook, { depth: null });
     }
+    const githubToken = (0,core.getInput)("github-token", {
+        required: false,
+        trimWhitespace: true
+    });
     let github;
     if (githubToken) {
         const readmeTemplateFile = (0,core.getInput)("readme-template", {
             required: true,
             trimWhitespace: true
         });
-        const updateMessage = (_b = (0,core.getInput)("github-update-message", {
+        const updateMessage = (_f = (0,core.getInput)("github-update-message", {
             required: false,
             trimWhitespace: true
-        })) !== null && _b !== void 0 ? _b : "Update README.md for Release {version}";
+        })) !== null && _f !== void 0 ? _f : "Update README.md for Release {version}";
+        const excludeLinks = (_k = (_j = (_h = (_g = (0,core.getInput)("exclude-links-readme", {
+            required: false,
+            trimWhitespace: true
+        })) === null || _g === void 0 ? void 0 : _g.split) === null || _h === void 0 ? void 0 : _h.call(_g, ",")) === null || _j === void 0 ? void 0 : _j.map) === null || _k === void 0 ? void 0 : _k.call(_j, s => s.trim());
+        let links2 = links;
+        if (excludeLinks) {
+            links2 = links2.filter(f => !excludeLinks.includes(f.name));
+        }
         github = {
             updateMessage,
             readmeTemplateFile,
-            links,
+            links: links2.filter(value => !(value.name in excludeLinks)),
             version,
             context: lib_github.context,
             getOctokit: () => lib_github.getOctokit(githubToken)
