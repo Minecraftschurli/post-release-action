@@ -7,7 +7,7 @@ interface Inputs {
   webhook?: Webhook;
 }
 
-function getInputs(): Inputs {
+export function getInputs(): Inputs {
   const [mcVersion, modVersion] = getInput("version", {
     required: true,
     trimWhitespace: true
@@ -32,23 +32,26 @@ function getInputs(): Inputs {
   });
   let webhook: Webhook | undefined;
   if (webhookUrl) {
-    const webhookName = getInput("webhook-name", {
-      required: false,
-      trimWhitespace: true
-    });
-    const webhookAvatar = getInput("webhook-avatar", {
-      required: false,
-      trimWhitespace: true
-    });
+    const webhookName =
+      getInput("webhook-name", {
+        required: false,
+        trimWhitespace: true
+      }) || undefined;
+    const webhookAvatar =
+      getInput("webhook-avatar", {
+        required: false,
+        trimWhitespace: true
+      }) || undefined;
     const title =
       getInput("webhook-title", {
         required: false,
         trimWhitespace: true
       }) ?? "New version {version} released!";
-    const description = getInput("webhook-message", {
-      required: true,
-      trimWhitespace: true
-    });
+    const description =
+      getInput("webhook-message", {
+        required: true,
+        trimWhitespace: true
+      }) || undefined;
     const excludeLinks = getInput("exclude-links-webhook", {
       required: false,
       trimWhitespace: true
@@ -70,6 +73,8 @@ function getInputs(): Inputs {
         fields: links2.map(f => ({name: f.name, value: `[Download](${f.link})`}))
       }
     };
+    // eslint-disable-next-line no-console
+    console.dir(webhook, {depth: null});
   }
   const githubToken = getInput("github-token", {
     required: false,
