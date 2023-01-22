@@ -55,6 +55,10 @@ function getInputs(): Inputs {
     })
       ?.split?.(",")
       ?.map?.(s => s.trim());
+    let links2 = links;
+    if (excludeLinks) {
+      links2 = links2.filter(f => !excludeLinks.includes(f.name));
+    }
     webhook = {
       url: webhookUrl,
       name: webhookName,
@@ -63,9 +67,7 @@ function getInputs(): Inputs {
         version,
         title,
         description,
-        fields: links
-          .filter(value => !(value.name in excludeLinks))
-          .map(f => ({name: f.name, value: `[Download](${f.link})`}))
+        fields: links2.map(f => ({name: f.name, value: `[Download](${f.link})`}))
       }
     };
   }
@@ -90,10 +92,14 @@ function getInputs(): Inputs {
     })
       ?.split?.(",")
       ?.map?.(s => s.trim());
+    let links2 = links;
+    if (excludeLinks) {
+      links2 = links2.filter(f => !excludeLinks.includes(f.name));
+    }
     github = {
       updateMessage,
       readmeTemplateFile,
-      links: links.filter(value => !(value.name in excludeLinks)),
+      links: links2.filter(value => !(value.name in excludeLinks)),
       version,
       context: gh.context,
       getOctokit: () => gh.getOctokit(githubToken)
