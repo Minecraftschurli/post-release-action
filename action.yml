@@ -5,11 +5,17 @@ inputs:
   webhook-url:
     description: 'The webhook URL to send the message to'
     required: false
-  webhook-message:
-    description: 'The message to send'
+  webhook-name:
+    description: 'The name the webhook should use'
+    required: false
+  webhook-avatar:
+    description: 'The url of the avatar the webhook should use'
     required: false
   webhook-title:
     description: 'The title of the message to send'
+    required: false
+  webhook-message:
+    description: 'The message to send'
     required: false
   github-token:
     description: 'The GitHub token to use'
