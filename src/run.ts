@@ -73,8 +73,6 @@ export function getInputs(): Inputs {
         fields: links2.map(f => ({name: f.name, value: `[Download](${f.link})`}))
       }
     };
-    // eslint-disable-next-line no-console
-    console.dir(webhook, {depth: null});
   }
   const githubToken = getInput("github-token", {
     required: false,
