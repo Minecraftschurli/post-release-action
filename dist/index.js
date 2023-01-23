@@ -171,14 +171,13 @@ function getInputs() {
         trimWhitespace: true
     }).split("-", 2);
     const version = { mcVersion, modVersion };
-    const links = (0,core.getInput)("published-to", {
+    const links = JSON.parse((0,core.getInput)("published-to", {
         required: true,
         trimWhitespace: true
-    })
-        .split(",")
+    }))
         .map((s) => s.trim())
         .map((name) => {
-        const link = (0,core.getInput)(`${name}-link`, {
+        const link = (0,core.getInput)(`${name.toLowerCase()}-link`, {
             required: true,
             trimWhitespace: true
         });

@@ -29,7 +29,7 @@ jobs:
           webhook-title: 'Test Message for {version}'
           version: '1.1.1-1.0.0'
           exclude-links-webhook: 'GitHub'
-          published-to: 'GitHub,Modrinth,CurseForge'
+          published-to: '["GitHub","Modrinth","CurseForge"]'
           github-link: 'https://github.com/'
           modrinth-link: 'https://modrinth.com/mod/'
           curseforge-link: 'https://mc-mods.cf/'
