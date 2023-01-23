@@ -45,14 +45,29 @@ export interface VersionTableRow {
 export async function sendWebhookMessage(webhook: Webhook): Promise<APIMessage> {
   const webhookClient = new WebhookClient({url: webhook.url});
   const version = `${webhook.message.version.mcVersion}-${webhook.message.version.modVersion}`;
-  const embed: APIEmbed = {
-    title: webhook.message.title.replace("{version}", version),
-    description: webhook.message.description?.replace?.("{version}", version),
-    color: 0x00ff00,
-    fields: webhook.message.fields.map(f => ({...f, inline: true}))
-  };
+  let author: APIEmbed["author"] | undefined;
+  if (webhook.name) {
+    author = {
+      name: webhook.name,
+      icon_url: webhook.avatar
+    };
+  }
+  const title = webhook.message.title.replace("{version}", version);
+  const description = webhook.message.description?.replace?.("{version}", version);
+  const color = 0x00ff00;
+  const fields = webhook.message.fields.map((f, _, a) => ({...f, inline: a.length <= 3}));
   return await webhookClient.send({
-    embeds: [embed]
+    username: webhook.name,
+    avatarURL: webhook.avatar,
+    embeds: [
+      {
+        author,
+        title,
+        description,
+        color,
+        fields
+      }
+    ]
   } as WebhookCreateMessageOptions);
 }
 

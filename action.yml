@@ -23,6 +23,9 @@ inputs:
   github-update-message:
     description: 'The message to use for the update commit'
     required: false
+  readme-template:
+    description: 'The template to use for the readme'
+    required: false
   github-link:
     description: 'The link to the created GitHub release'
     required: false

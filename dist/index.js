@@ -50,14 +50,29 @@ async function sendWebhookMessage(webhook) {
     var _a, _b;
     const webhookClient = new src.WebhookClient({ url: webhook.url });
     const version = `${webhook.message.version.mcVersion}-${webhook.message.version.modVersion}`;
-    const embed = {
-        title: webhook.message.title.replace("{version}", version),
-        description: (_b = (_a = webhook.message.description) === null || _a === void 0 ? void 0 : _a.replace) === null || _b === void 0 ? void 0 : _b.call(_a, "{version}", version),
-        color: 0x00ff00,
-        fields: webhook.message.fields.map(f => (Object.assign(Object.assign({}, f), { inline: true })))
-    };
+    let author;
+    if (webhook.name) {
+        author = {
+            name: webhook.name,
+            icon_url: webhook.avatar
+        };
+    }
+    const title = webhook.message.title.replace("{version}", version);
+    const description = (_b = (_a = webhook.message.description) === null || _a === void 0 ? void 0 : _a.replace) === null || _b === void 0 ? void 0 : _b.call(_a, "{version}", version);
+    const color = 0x00ff00;
+    const fields = webhook.message.fields.map((f, _, a) => (Object.assign(Object.assign({}, f), { inline: a.length <= 3 })));
     return await webhookClient.send({
-        embeds: [embed]
+        username: webhook.name,
+        avatarURL: webhook.avatar,
+        embeds: [
+            {
+                author,
+                title,
+                description,
+                color,
+                fields
+            }
+        ]
     });
 }
 function parseMarkdownTable(markdown) {
