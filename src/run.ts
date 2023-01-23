@@ -13,14 +13,15 @@ export function getInputs(): Inputs {
     trimWhitespace: true
   }).split("-", 2);
   const version = {mcVersion, modVersion};
-  const links: NamedLink[] = getInput("published-to", {
-    required: true,
-    trimWhitespace: true
-  })
-    .split(",")
+  const links: NamedLink[] = JSON.parse(
+    getInput("published-to", {
+      required: true,
+      trimWhitespace: true
+    })
+  )
     .map((s: string) => s.trim())
     .map((name: string) => {
-      const link = getInput(`${name}-link`, {
+      const link = getInput(`${name.toLowerCase()}-link`, {
         required: true,
         trimWhitespace: true
       });
